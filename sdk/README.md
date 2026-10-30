@@ -3,6 +3,9 @@
 Drive the installed Halo from your own programs and agents. Each request goes in as words and comes back as a
 typed outcome, with the same previews, permission checks, sandboxing and approvals as the Halo shell.
 
+**Requires a Halo client with machine mode, which is coming in the next client release.** Earlier clients
+(v0.1.5 and before) cannot start an SDK session: `halo.Start` fails with `halo_exited`.
+
 The SDK runs the `halo` you already installed (`curl -fsSL https://memcode.ai/halo/install.sh | sh`). It needs
 no extra runtime, daemon or service, and uses your Halo sign-in (`halo login`).
 
