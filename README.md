@@ -2,7 +2,7 @@
 
 Releases of the **Halo** command-line client, by [Memcode](https://memcode.ai).
 
-Halo is fast natural-language computer control: ask for everyday computer tasks in plain English, see what
+Halo is fast natural-language computer use: ask for everyday computer tasks in plain English, see what
 Halo will do, and run it on your own machine. Halo is in Preview and free during Preview.
 
 ## Install
