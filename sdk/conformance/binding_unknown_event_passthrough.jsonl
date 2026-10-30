@@ -1,8 +1,13 @@
 {"meta":{"name":"binding_unknown_event_passthrough","description":"an event type the binding does not know (a newer Halo's) reaches the host as an event; the turn still ends at its outcome","applies":["binding"]}}
-{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
-{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","activity"],"halo_version":"9.9.9","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
-{"in":{"data":{"text":"follow server.log"},"turn_id":"t1","type":"user_turn","version":"1"}}
-{"out":{"data":{"text":"follow server.log"},"turn_id":"t1","type":"turn_started","version":"1"}}
-{"out":{"data":{"activity_id":"x1","lifecycle":"stream"},"turn_id":"t1","type":"activity_started","version":"1"}}
-{"out":{"data":{"completed":true,"kind":"answer","message":"done","future_field":{"ignored":true}},"turn_id":"t1","type":"outcome","version":"1"}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning","sessions","activity"],"halo_version":"9.9.9","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"data":{"cwd":"$ROOT"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"session_id":"$SESSION1"},"id":"s1","session_id":"$SESSION1","type":"session_created","version":"2"}}
+{"in":{"data":{"text":"follow server.log"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
+{"out":{"data":{"text":"follow server.log"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
+{"out":{"data":{"activity_id":"x1","lifecycle":"stream"},"session_id":"$SESSION1","turn_id":"t1","type":"activity_started","version":"2"}}
+{"out":{"data":{"completed":true,"future_field":{"ignored":true},"kind":"answer","message":"done"},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
 {"eof":true}

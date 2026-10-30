@@ -1,0 +1,4 @@
+{"meta":{"name":"session_before_initialize","description":"create_session before initialize is invalid_request","applies":["adapter"]}}
+{"in":{"data":{"cwd":"$ROOT"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"code":"invalid_request","message":"send initialize first","retryable":false},"id":"s1","type":"error","version":"2"}}
+{"eof":true}

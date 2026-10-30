@@ -1,4 +1,4 @@
 {"meta":{"name":"turn_before_initialize","description":"a user_turn before initialize is invalid_request","applies":["adapter"]}}
-{"in":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"user_turn","version":"1"}}
-{"out":{"data":{"code":"invalid_request","message":"send initialize first","retryable":false},"turn_id":"t1","type":"error","version":"1"}}
+{"in":{"data":{"text":"what is 2 plus 2"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
+{"out":{"data":{"code":"invalid_request","message":"send initialize first","retryable":false},"session_id":"$SESSION1","turn_id":"t1","type":"error","version":"2"}}
 {"eof":true}

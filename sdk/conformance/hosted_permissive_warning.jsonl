@@ -1,0 +1,10 @@
+{"meta":{"name":"hosted_permissive_warning","description":"usage hosted with a permissive mode: Halo warns (advice only; the session works as asked)","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2","usage":"hosted"},"type":"initialize","version":"2"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning","sessions"],"halo_version":"test","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"data":{"cwd":"$ROOT","permission_mode":"acceptEdits"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"session_id":"$SESSION1"},"id":"s1","session_id":"$SESSION1","type":"session_created","version":"2"}}
+{"out":{"data":{"code":"hosted_permissive_mode","message":"This hosted session lets Halo change things on this machine without asking (acceptEdits). Halo controls the machine and account it runs on: never forward untrusted users' requests to it; isolate each user's Halo in a container or VM."},"session_id":"$SESSION1","type":"warning","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
+{"eof":true}

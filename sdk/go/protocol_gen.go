@@ -8,7 +8,7 @@ import (
 )
 
 // ProtocolVersion is the machine protocol this binding speaks.
-const ProtocolVersion = "1"
+const ProtocolVersion = "2"
 
 // Answer is a protocol type.
 type Answer struct {
@@ -69,13 +69,27 @@ type ClientInfo struct {
 	Version string `json:"version,omitempty"`
 }
 
+// CreateSessionData is a protocol type.
+type CreateSessionData struct {
+	Cwd                  string   `json:"cwd,omitempty"`
+	PermissionMode       string   `json:"permission_mode,omitempty"`
+	AllowedOperations    []string `json:"allowed_operations,omitempty"`
+	DisallowedOperations []string `json:"disallowed_operations,omitempty"`
+	AllowCatastrophic    bool     `json:"allow_catastrophic,omitempty"`
+	AllowUnconfined      bool     `json:"allow_unconfined,omitempty"`
+	SettingSources       []string `json:"setting_sources,omitempty"`
+	Model                string   `json:"model,omitempty"`
+	IdleTimeoutMs        int64    `json:"idle_timeout_ms,omitempty"`
+}
+
 // Envelope is a protocol type.
 type Envelope struct {
-	Version string          `json:"version"`
-	Type    string          `json:"type"`
-	ID      string          `json:"id,omitempty"`
-	TurnID  string          `json:"turn_id,omitempty"`
-	Data    json.RawMessage `json:"data,omitempty"`
+	Version   string          `json:"version"`
+	Type      string          `json:"type"`
+	ID        string          `json:"id,omitempty"`
+	TurnID    string          `json:"turn_id,omitempty"`
+	SessionID string          `json:"session_id,omitempty"`
+	Data      json.RawMessage `json:"data,omitempty"`
 }
 
 // ErrorData is a protocol type.
@@ -104,36 +118,20 @@ type File struct {
 
 // InitializeData is a protocol type.
 type InitializeData struct {
-	Protocol             string     `json:"protocol,omitempty"`
-	Cwd                  string     `json:"cwd,omitempty"`
-	Client               ClientInfo `json:"client"`
-	PermissionMode       string     `json:"permission_mode,omitempty"`
-	AllowedOperations    []string   `json:"allowed_operations,omitempty"`
-	DisallowedOperations []string   `json:"disallowed_operations,omitempty"`
-	AllowCatastrophic    bool       `json:"allow_catastrophic,omitempty"`
-	AllowUnconfined      bool       `json:"allow_unconfined,omitempty"`
-	SettingSources       []string   `json:"setting_sources,omitempty"`
-	Capabilities         []string   `json:"capabilities,omitempty"`
-	Require              []string   `json:"require,omitempty"`
-	Model                string     `json:"model,omitempty"`
+	Protocol     string     `json:"protocol,omitempty"`
+	Client       ClientInfo `json:"client"`
+	Capabilities []string   `json:"capabilities,omitempty"`
+	Require      []string   `json:"require,omitempty"`
+	Usage        string     `json:"usage,omitempty"`
 }
 
 // InitializedData is a protocol type.
 type InitializedData struct {
-	SessionID    string     `json:"session_id"`
-	Protocol     string     `json:"protocol"`
-	HaloVersion  string     `json:"halo_version"`
-	Service      string     `json:"service"`
-	Capabilities []string   `json:"capabilities"`
-	SignedIn     bool       `json:"signed_in"`
-	Model        *ModelInfo `json:"model,omitempty"`
-}
-
-// ModelInfo is a protocol type.
-type ModelInfo struct {
-	ID          string `json:"id"`
-	Status      string `json:"status"`
-	Replacement string `json:"replacement,omitempty"`
+	Protocol     string   `json:"protocol"`
+	HaloVersion  string   `json:"halo_version"`
+	Service      string   `json:"service"`
+	Capabilities []string `json:"capabilities"`
+	SignedIn     bool     `json:"signed_in"`
 }
 
 // OfferRequestData is a protocol type.
@@ -219,6 +217,18 @@ type Result struct {
 // Row is a protocol type.
 type Row map[string]any
 
+// SessionClosedData is a protocol type.
+type SessionClosedData struct {
+	SessionID string `json:"session_id"`
+	Reason    string `json:"reason"`
+}
+
+// SessionCreatedData is a protocol type.
+type SessionCreatedData struct {
+	SessionID string `json:"session_id"`
+	Model     string `json:"model,omitempty"`
+}
+
 // SessionResetData is a protocol type.
 type SessionResetData struct {
 	SessionID string `json:"session_id"`
@@ -258,6 +268,12 @@ type UserTurnData struct {
 	Text string `json:"text"`
 }
 
+// WarningData is a protocol type.
+type WarningData struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
 // Message types.
 const (
 	MsgApprovalRequest  = "approval_request"
@@ -265,6 +281,8 @@ const (
 	MsgCancel           = "cancel"
 	MsgChoiceRequest    = "choice_request"
 	MsgChoiceResponse   = "choice_response"
+	MsgCloseSession     = "close_session"
+	MsgCreateSession    = "create_session"
 	MsgError            = "error"
 	MsgInitialize       = "initialize"
 	MsgInitialized      = "initialized"
@@ -273,10 +291,15 @@ const (
 	MsgOutcome          = "outcome"
 	MsgProposal         = "proposal"
 	MsgReset            = "reset"
+	MsgSessionClosed    = "session_closed"
+	MsgSessionCreated   = "session_created"
 	MsgSessionReset     = "session_reset"
+	MsgShutdown         = "shutdown"
+	MsgShutdownComplete = "shutdown_complete"
 	MsgStepResult       = "step_result"
 	MsgTurnStarted      = "turn_started"
 	MsgUserTurn         = "user_turn"
+	MsgWarning          = "warning"
 )
 
 // Outcome kinds.
@@ -310,6 +333,7 @@ const (
 	CodeInternal               = "internal"
 	CodeServiceError           = "service_error"
 	CodeModelNotAvailable      = "model_not_available"
+	CodeUnknownSession         = "unknown_session"
 	CodeRateLimit              = "rate_limit"
 	CodeConcurrent             = "concurrent"
 	CodeCapacityUnavailable    = "capacity_unavailable"

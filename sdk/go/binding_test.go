@@ -9,7 +9,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -77,32 +79,41 @@ func TestOlder(t *testing.T) {
 	}
 }
 
-// a minimal halo that completes the handshake; every later line the binding sends arrives on the channel, and
-// halo exits when the binding closes its stdin
-func handshake(t *testing.T, version string) (*fakeHalo, <-chan Envelope, func(Envelope, any)) {
+// a minimal halo: it completes the handshake (with caps) and opens every session it is asked for; every other
+// line the binding sends arrives on the channel, and halo exits when the binding closes its stdin
+func handshake(t *testing.T, version string, caps ...string) (*fakeHalo, <-chan Envelope, func(Envelope, any)) {
 	f := newFakeHalo()
+	var wmu sync.Mutex
 	write := func(e Envelope, data any) {
-		e.Version = "1"
+		e.Version = ProtocolVersion
 		if data != nil {
 			e.Data, _ = json.Marshal(data)
 		}
 		b, _ := json.Marshal(e)
+		wmu.Lock()
 		f.outW.Write(append(b, '\n'))
+		wmu.Unlock()
 	}
 	got := make(chan Envelope, 16)
 	go func() {
 		defer f.exit()
 		sc := bufio.NewScanner(f.inR)
-		first := true
+		n := 0
 		for sc.Scan() {
 			var e Envelope
 			json.Unmarshal(sc.Bytes(), &e)
-			if first {
-				first = false
-				write(Envelope{Type: MsgInitialized}, InitializedData{SessionID: "s", Protocol: "1", HaloVersion: version, Service: "halo/1", SignedIn: true})
-				continue
+			switch e.Type {
+			case MsgInitialize:
+				write(Envelope{Type: MsgInitialized}, InitializedData{Protocol: ProtocolVersion, HaloVersion: version, Service: "halo/1", SignedIn: true, Capabilities: caps})
+			case MsgCreateSession:
+				n++
+				id := "S" + strconv.Itoa(n)
+				write(Envelope{Type: MsgSessionCreated, ID: e.ID, SessionID: id}, SessionCreatedData{SessionID: id})
+			case MsgShutdown:
+				write(Envelope{Type: MsgShutdownComplete, ID: e.ID}, struct{}{})
+			default:
+				got <- e
 			}
-			got <- e
 		}
 	}()
 	return f, got, write
@@ -123,22 +134,35 @@ func receive(t *testing.T, got <-chan Envelope) Envelope {
 	}
 }
 
+// open connects and opens one session.
+func open(t *testing.T, f *fakeHalo, opts ClientOptions) (*Client, *Session) {
+	t.Helper()
+	opts.Launch = launcher(f)
+	c, err := Connect(context.Background(), opts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { c.Close() })
+	s, err := c.NewSession(context.Background(), SessionOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return c, s
+}
+
 func TestMinHaloVersion(t *testing.T) {
 	f, _, _ := handshake(t, "0.1.4")
-	_, err := Start(context.Background(), Options{Launch: launcher(f), MinHaloVersion: "0.1.5"})
+	_, err := Connect(context.Background(), ClientOptions{Launch: launcher(f), MinHaloVersion: "0.1.5"})
 	if e, ok := err.(*Error); !ok || e.Code != CodeVersionMismatch || !strings.Contains(e.Message, "halo upgrade") {
 		t.Errorf("an old halo: %v", err)
 	}
 }
 
-// One turn at a time: a second Run while one is in flight is refused locally, and nothing is sent.
+// One turn at a time per session: a second Run while one is in flight is refused locally, and nothing is sent.
+// Another session of the same client is not affected.
 func TestConcurrentRunRefused(t *testing.T) {
 	f, got, write := handshake(t, "test")
-	s, err := Start(context.Background(), Options{Launch: launcher(f)})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer s.Close()
+	c, s := open(t, f, ClientOptions{})
 	ex, err := s.Begin(context.Background(), "hang")
 	if err != nil {
 		t.Fatal(err)
@@ -152,37 +176,43 @@ func TestConcurrentRunRefused(t *testing.T) {
 		t.Errorf("a refused run sent %+v", e)
 	default:
 	}
-	write(Envelope{Type: MsgOutcome, TurnID: ex.TurnID()}, OutcomeData{Kind: KindAnswer, Message: "ok", Completed: true})
-	if o, err := ex.Outcome(); err != nil || o.Kind != KindAnswer {
-		t.Fatalf("%v %v", o, err)
-	}
-	ex2, err := s.Begin(context.Background(), "next")
-	if err != nil {
-		t.Fatalf("after the outcome: %v", err)
-	}
-	e := receive(t, got)
-	write(Envelope{Type: MsgOutcome, TurnID: e.TurnID}, OutcomeData{Kind: KindAnswer, Completed: true})
-	if o, err := ex2.Outcome(); err != nil || o.Kind != KindAnswer {
-		t.Errorf("after the outcome: %v %v", o, err)
-	}
-}
-
-// Cancelling the context of Run cancels the turn in halo.
-func TestContextCancelsTurn(t *testing.T) {
-	f, got, write := handshake(t, "test")
-	s, err := Start(context.Background(), Options{Launch: launcher(f)})
+	other, err := c.NewSession(context.Background(), SessionOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer s.Close()
+	ex2, err := other.Begin(context.Background(), "in another session")
+	if err != nil {
+		t.Fatalf("another session: %v", err)
+	}
+	e := receive(t, got)
+	if e.SessionID != other.ID() {
+		t.Fatalf("sent for %s, want %s", e.SessionID, other.ID())
+	}
+	write(Envelope{Type: MsgOutcome, SessionID: other.ID(), TurnID: e.TurnID}, OutcomeData{Kind: KindAnswer, Completed: true})
+	if o, err := ex2.Outcome(); err != nil || o.Kind != KindAnswer {
+		t.Fatalf("other session: %v %v", o, err)
+	}
+	write(Envelope{Type: MsgOutcome, SessionID: s.ID(), TurnID: ex.TurnID()}, OutcomeData{Kind: KindAnswer, Message: "ok", Completed: true, Model: "halo-orbit-preview"})
+	if o, err := ex.Outcome(); err != nil || o.Kind != KindAnswer {
+		t.Fatalf("%v %v", o, err)
+	}
+	if s.Model() != "halo-orbit-preview" {
+		t.Errorf("the first turn did not pin the model: %q", s.Model())
+	}
+}
+
+// Cancelling the context of Run cancels the turn in halo, in its session only.
+func TestContextCancelsTurn(t *testing.T) {
+	f, got, write := handshake(t, "test")
+	_, s := open(t, f, ClientOptions{})
 	ctx, cancel := context.WithCancel(context.Background())
 	ex, _ := s.Begin(ctx, "hang")
 	receive(t, got)
 	cancel()
-	if e := receive(t, got); e.Type != MsgCancel || e.TurnID != ex.TurnID() {
+	if e := receive(t, got); e.Type != MsgCancel || e.TurnID != ex.TurnID() || e.SessionID != s.ID() {
 		t.Fatalf("sent %+v", e)
 	}
-	write(Envelope{Type: MsgOutcome, TurnID: ex.TurnID()}, OutcomeData{Kind: KindCancelled})
+	write(Envelope{Type: MsgOutcome, SessionID: s.ID(), TurnID: ex.TurnID()}, OutcomeData{Kind: KindCancelled})
 	if o, _ := ex.Outcome(); o == nil || o.Kind != KindCancelled {
 		t.Errorf("%+v", o)
 	}
@@ -191,11 +221,7 @@ func TestContextCancelsTurn(t *testing.T) {
 // With no Interactor the binding answers any request with the safe default: deny, cancel, no.
 func TestNoInteractorDefaults(t *testing.T) {
 	f, got, write := handshake(t, "test")
-	s, err := Start(context.Background(), Options{Launch: launcher(f)})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer s.Close()
+	_, s := open(t, f, ClientOptions{})
 	ex, _ := s.Begin(context.Background(), "x")
 	receive(t, got)
 	want := map[string]string{
@@ -204,40 +230,52 @@ func TestNoInteractorDefaults(t *testing.T) {
 		MsgOfferResponse:    `{"yes":false}`,
 	}
 	for req, reply := range map[string]string{MsgApprovalRequest: MsgApprovalResponse, MsgChoiceRequest: MsgChoiceResponse, MsgOfferRequest: MsgOfferResponse} {
-		write(Envelope{Type: req, ID: "r1", TurnID: ex.TurnID()}, map[string]any{})
+		write(Envelope{Type: req, ID: "r1", SessionID: s.ID(), TurnID: ex.TurnID()}, map[string]any{})
 		e := receive(t, got)
-		if e.Type != reply || e.ID != "r1" || canonical(e.Data) != canonical([]byte(want[reply])) {
+		if e.Type != reply || e.ID != "r1" || e.SessionID != s.ID() || canonical(e.Data) != canonical([]byte(want[reply])) {
 			t.Errorf("%s: replied %+v %s", req, e, e.Data)
 		}
 	}
-	write(Envelope{Type: MsgOutcome, TurnID: ex.TurnID()}, OutcomeData{Kind: KindDenied, Code: CodeApprovalRequired, Completed: true})
+	write(Envelope{Type: MsgOutcome, SessionID: s.ID(), TurnID: ex.TurnID()}, OutcomeData{Kind: KindDenied, Code: CodeApprovalRequired, Completed: true})
 	ex.Outcome()
 }
 
-// A pinned model: an old Halo that cannot pin fails the handshake, a different pin fails it, and a pin not yet
-// resolved (the service unreachable at the handshake) is left to Halo, which enforces it at the first turn.
-func TestPinnedModelHandshake(t *testing.T) {
-	opts := Options{Model: "halo-orbit-preview"}
-	caps := []string{CapModelPinning}
-	for name, c := range map[string]struct {
-		info InitializedData
-		code string
-	}{
-		"old halo":   {InitializedData{Protocol: ProtocolVersion, SignedIn: true}, CodeVersionMismatch},
-		"other pin":  {InitializedData{Protocol: ProtocolVersion, SignedIn: true, Capabilities: caps, Model: &ModelInfo{ID: "halo-dev"}}, CodeModelNotAvailable},
-		"pinned":     {InitializedData{Protocol: ProtocolVersion, SignedIn: true, Capabilities: caps, Model: &ModelInfo{ID: "halo-orbit-preview"}}, ""},
-		"unresolved": {InitializedData{Protocol: ProtocolVersion, SignedIn: true, Capabilities: caps}, ""},
-	} {
-		err := checkVersion(c.info, opts)
-		got := ""
-		if e, ok := err.(*Error); ok {
-			got = e.Code
-		}
-		if got != c.code {
-			t.Errorf("%s: %v (want %q)", name, err, c.code)
-		}
+// A pinned model needs a Halo that pins (version_mismatch before anything is sent otherwise); the pin itself is
+// checked by the service on the first turn.
+func TestPinnedModelNeedsAPinningHalo(t *testing.T) {
+	f, _, _ := handshake(t, "test")
+	c, err := Connect(context.Background(), ClientOptions{Launch: launcher(f)})
+	if err != nil {
+		t.Fatal(err)
 	}
-	if err := checkVersion(InitializedData{Protocol: ProtocolVersion}, Options{}); err != nil {
-		t.Errorf("no model asked for: %v", err)
+	defer c.Close()
+	if _, err := c.NewSession(context.Background(), SessionOptions{Model: "halo-orbit-preview"}); err == nil || err.(*Error).Code != CodeVersionMismatch {
+		t.Errorf("an old halo: %v", err)
+	}
+	f2, _, _ := handshake(t, "test", CapModelPinning, CapSessions)
+	c2, err := Connect(context.Background(), ClientOptions{Launch: launcher(f2)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c2.Close()
+	if s, err := c2.NewSession(context.Background(), SessionOptions{Model: "halo-orbit-preview"}); err != nil || s == nil {
+		t.Errorf("a pinning halo: %v", err)
+	}
+}
+
+// Close shuts halo down (shutdown, then EOF) and its sessions refuse further turns.
+func TestCloseShutsDown(t *testing.T) {
+	f, _, _ := handshake(t, "test")
+	c, s := open(t, f, ClientOptions{})
+	if err := c.Close(); err != nil {
+		t.Fatal(err)
+	}
+	select {
+	case <-f.exited:
+	case <-time.After(5 * time.Second):
+		t.Fatal("halo did not exit after Close")
+	}
+	if _, err := s.Begin(context.Background(), "after close"); err == nil {
+		t.Error("a turn after Close was accepted")
 	}
 }

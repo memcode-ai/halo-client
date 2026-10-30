@@ -1,0 +1,13 @@
+{"meta":{"name":"close_during_turn","description":"closing a session with a running turn cancels it: its outcome, then session_closed","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning","sessions"],"halo_version":"test","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"data":{"cwd":"$ROOT"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"session_id":"$SESSION1"},"id":"s1","session_id":"$SESSION1","type":"session_created","version":"2"}}
+{"in":{"data":{"text":"hang"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
+{"out":{"data":{"text":"hang"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
+{"in":{"id":"x1","session_id":"$SESSION1","type":"close_session","version":"2"}}
+{"out":{"data":{"completed":false,"kind":"cancelled","reason":"cancelled"},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"out":{"data":{"reason":"closed","session_id":"$SESSION1"},"id":"x1","session_id":"$SESSION1","type":"session_closed","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
+{"eof":true}

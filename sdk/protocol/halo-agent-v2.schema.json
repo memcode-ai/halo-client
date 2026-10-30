@@ -1,16 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://memcode.ai/halo/protocol/halo-agent-v1.schema.json",
-  "title": "Halo machine protocol, version 1",
+  "$id": "https://memcode.ai/halo/protocol/halo-agent-v2.schema.json",
+  "title": "Halo machine protocol, version 2",
   "description": "Newline-delimited JSON envelopes between a host and `halo --protocol stream-json`. Generated from the Go protocol types; do not edit.",
   "$ref": "#/$defs/Envelope",
-  "x-protocol-version": "1",
+  "x-protocol-version": "2",
   "x-message-types": [
     "approval_request",
     "approval_response",
     "cancel",
     "choice_request",
     "choice_response",
+    "close_session",
+    "create_session",
     "error",
     "initialize",
     "initialized",
@@ -19,10 +21,15 @@
     "outcome",
     "proposal",
     "reset",
+    "session_closed",
+    "session_created",
     "session_reset",
+    "shutdown",
+    "shutdown_complete",
     "step_result",
     "turn_started",
-    "user_turn"
+    "user_turn",
+    "warning"
   ],
   "x-payloads": {
     "approval_request": {
@@ -39,6 +46,12 @@
     },
     "choice_response": {
       "$ref": "#/$defs/ChoiceResponseData"
+    },
+    "close_session": {
+      "type": "object"
+    },
+    "create_session": {
+      "$ref": "#/$defs/CreateSessionData"
     },
     "error": {
       "$ref": "#/$defs/ErrorData"
@@ -64,8 +77,20 @@
     "reset": {
       "type": "object"
     },
+    "session_closed": {
+      "$ref": "#/$defs/SessionClosedData"
+    },
+    "session_created": {
+      "$ref": "#/$defs/SessionCreatedData"
+    },
     "session_reset": {
       "$ref": "#/$defs/SessionResetData"
+    },
+    "shutdown": {
+      "type": "object"
+    },
+    "shutdown_complete": {
+      "type": "object"
     },
     "step_result": {
       "$ref": "#/$defs/StepResultData"
@@ -75,6 +100,9 @@
     },
     "user_turn": {
       "$ref": "#/$defs/UserTurnData"
+    },
+    "warning": {
+      "$ref": "#/$defs/WarningData"
     }
   },
   "x-outcome-kinds": [
@@ -105,6 +133,7 @@
     "internal",
     "service_error",
     "model_not_available",
+    "unknown_session",
     "rate_limit",
     "concurrent",
     "capacity_unavailable",
@@ -129,6 +158,7 @@
     "session_permissions",
     "program_steps",
     "model_pinning",
+    "sessions",
     "streaming"
   ],
   "$defs": {
@@ -288,6 +318,47 @@
         "name"
       ]
     },
+    "CreateSessionData": {
+      "type": "object",
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "type": "string"
+        },
+        "allowed_operations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disallowed_operations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allow_catastrophic": {
+          "type": "boolean"
+        },
+        "allow_unconfined": {
+          "type": "boolean"
+        },
+        "setting_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "model": {
+          "type": "string"
+        },
+        "idle_timeout_ms": {
+          "type": "integer"
+        }
+      }
+    },
     "Envelope": {
       "type": "object",
       "properties": {
@@ -301,6 +372,9 @@
           "type": "string"
         },
         "turn_id": {
+          "type": "string"
+        },
+        "session_id": {
           "type": "string"
         },
         "data": {}
@@ -388,38 +462,8 @@
         "protocol": {
           "type": "string"
         },
-        "cwd": {
-          "type": "string"
-        },
         "client": {
           "$ref": "#/$defs/ClientInfo"
-        },
-        "permission_mode": {
-          "type": "string"
-        },
-        "allowed_operations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "disallowed_operations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "allow_catastrophic": {
-          "type": "boolean"
-        },
-        "allow_unconfined": {
-          "type": "boolean"
-        },
-        "setting_sources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "capabilities": {
           "type": "array",
@@ -433,7 +477,7 @@
             "type": "string"
           }
         },
-        "model": {
+        "usage": {
           "type": "string"
         }
       },
@@ -444,9 +488,6 @@
     "InitializedData": {
       "type": "object",
       "properties": {
-        "session_id": {
-          "type": "string"
-        },
         "protocol": {
           "type": "string"
         },
@@ -464,36 +505,14 @@
         },
         "signed_in": {
           "type": "boolean"
-        },
-        "model": {
-          "$ref": "#/$defs/ModelInfo"
         }
       },
       "required": [
-        "session_id",
         "protocol",
         "halo_version",
         "service",
         "capabilities",
         "signed_in"
-      ]
-    },
-    "ModelInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "replacement": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "id",
-        "status"
       ]
     },
     "OfferRequestData": {
@@ -739,6 +758,35 @@
       "type": "object",
       "additionalProperties": {}
     },
+    "SessionClosedData": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "reason"
+      ]
+    },
+    "SessionCreatedData": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id"
+      ]
+    },
     "SessionResetData": {
       "type": "object",
       "properties": {
@@ -831,6 +879,21 @@
       },
       "required": [
         "text"
+      ]
+    },
+    "WarningData": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
       ]
     }
   }

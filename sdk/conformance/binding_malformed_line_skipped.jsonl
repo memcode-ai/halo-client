@@ -1,5 +1,7 @@
 {"meta":{"name":"binding_malformed_line_skipped","description":"a line from halo that is not an envelope is skipped","applies":["binding"]}}
-{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
 {"out_raw":"not an envelope {"}
-{"out":{"data":{"capabilities":["typed_outcomes"],"halo_version":"test","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","sessions"],"halo_version":"test","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
 {"eof":true}

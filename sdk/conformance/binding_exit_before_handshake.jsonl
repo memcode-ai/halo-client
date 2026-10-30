@@ -1,3 +1,3 @@
-{"meta":{"name":"binding_exit_before_handshake","description":"halo exits before initialized (a wrong binary, a crash): Start fails with halo_exited, never a ready session","applies":["binding"]}}
-{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"meta":{"name":"binding_exit_before_handshake","description":"halo exits before initialized (a wrong binary, a crash): Connect fails with halo_exited, never a ready client","applies":["binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
 {"halo_exit":true}

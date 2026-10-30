@@ -1,7 +1,12 @@
 {"meta":{"name":"open_question","description":"an open clarification ends the turn; the next user_turn answers it","applies":["adapter","binding"]}}
-{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
-{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
-{"in":{"data":{"text":"tidy things"},"turn_id":"t1","type":"user_turn","version":"1"}}
-{"out":{"data":{"text":"tidy things"},"turn_id":"t1","type":"turn_started","version":"1"}}
-{"out":{"data":{"completed":true,"kind":"question","model":"halo-test-preview","question":"What should I tidy?"},"turn_id":"t1","type":"outcome","version":"1"}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning","sessions"],"halo_version":"test","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"data":{"cwd":"$ROOT"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"session_id":"$SESSION1"},"id":"s1","session_id":"$SESSION1","type":"session_created","version":"2"}}
+{"in":{"data":{"text":"tidy things"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
+{"out":{"data":{"text":"tidy things"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
+{"out":{"data":{"completed":true,"kind":"question","model":"halo-test-preview","question":"What should I tidy?"},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
 {"eof":true}

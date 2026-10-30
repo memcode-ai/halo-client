@@ -1,8 +1,13 @@
 {"meta":{"name":"denied_by_mode","description":"dontAsk denies what needs approval","applies":["adapter","binding"]}}
-{"in":{"data":{"capabilities":["approvals","choices","offers"],"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","permission_mode":"dontAsk","protocol":"1"},"type":"initialize","version":"1"}}
-{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
-{"in":{"data":{"text":"write hello to out.txt"},"turn_id":"t1","type":"user_turn","version":"1"}}
-{"out":{"data":{"text":"write hello to out.txt"},"turn_id":"t1","type":"turn_started","version":"1"}}
-{"out":{"data":{"plan":{"command":"printf '%s\\n' hello \u003e out.txt","decision":"confirm","effect":"WRITE","kind":"operation","native":true,"operation":"files.write","preview":{"bytes":0,"objects":1,"sample":["out.txt"]},"reason":"this changes files","risk":"medium"}},"turn_id":"t1","type":"proposal","version":"1"}}
-{"out":{"data":{"code":"denied_by_mode","command":"printf '%s\\n' hello \u003e out.txt","completed":true,"kind":"denied","message":"needs approval, and this session does not ask (mode dontAsk)","model":"halo-test-preview","reason":"needs approval, and this session does not ask (mode dontAsk)"},"turn_id":"t1","type":"outcome","version":"1"}}
+{"in":{"data":{"capabilities":["approvals","choices","offers"],"client":{"name":"conformance","version":"1.0"},"protocol":"2"},"type":"initialize","version":"2"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning","sessions"],"halo_version":"test","protocol":"2","service":"halo/1","signed_in":true},"type":"initialized","version":"2"}}
+{"in":{"data":{"cwd":"$ROOT","permission_mode":"dontAsk"},"id":"s1","type":"create_session","version":"2"}}
+{"out":{"data":{"session_id":"$SESSION1"},"id":"s1","session_id":"$SESSION1","type":"session_created","version":"2"}}
+{"in":{"data":{"text":"write hello to out.txt"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
+{"out":{"data":{"text":"write hello to out.txt"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
+{"out":{"data":{"plan":{"command":"printf '%s\\n' hello \u003e out.txt","decision":"confirm","effect":"WRITE","kind":"operation","native":true,"operation":"files.write","preview":{"bytes":0,"objects":1,"sample":["out.txt"]},"reason":"this changes files","risk":"medium"}},"session_id":"$SESSION1","turn_id":"t1","type":"proposal","version":"2"}}
+{"out":{"data":{"code":"denied_by_mode","command":"printf '%s\\n' hello \u003e out.txt","completed":true,"kind":"denied","message":"needs approval, and this session does not ask (mode dontAsk)","model":"halo-test-preview","reason":"needs approval, and this session does not ask (mode dontAsk)"},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"in":{"id":"q1","type":"shutdown","version":"2"}}
+{"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
+{"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
 {"eof":true}
