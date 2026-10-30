@@ -1,0 +1,8 @@
+{"meta":{"name":"binding_unknown_event_passthrough","description":"an event type the binding does not know (a newer Halo's) reaches the host as an event; the turn still ends at its outcome","applies":["binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","activity"],"halo_version":"9.9.9","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"follow server.log"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"follow server.log"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"activity_id":"x1","lifecycle":"stream"},"turn_id":"t1","type":"activity_started","version":"1"}}
+{"out":{"data":{"completed":true,"kind":"answer","message":"done","future_field":{"ignored":true}},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

@@ -1,0 +1,4 @@
+{"meta":{"name":"handshake_protocol_mismatch","description":"the host speaks another major protocol: version_mismatch","applies":["adapter"]}}
+{"in":{"data":{"client":{"name":"conformance"},"cwd":"$ROOT","protocol":"2"},"type":"initialize","version":"1"}}
+{"out":{"data":{"code":"version_mismatch","message":"this Halo speaks machine protocol 1, not 2; run `halo upgrade` or use a matching SDK","retryable":false},"type":"error","version":"1"}}
+{"eof":true}

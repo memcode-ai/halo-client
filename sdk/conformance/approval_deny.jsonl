@@ -1,0 +1,10 @@
+{"meta":{"name":"approval_deny","description":"the host denies a deletion with a message: declined, nothing deleted","applies":["adapter","binding"],"files":{"x.txt":"x\n"}}}
+{"in":{"data":{"capabilities":["approvals","choices","offers"],"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"delete x.txt"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"delete x.txt"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"plan":{"command":"rm -- x.txt","decision":"confirm","effect":"DESTRUCTIVE","kind":"operation","native":true,"operation":"files.delete","preview":{"bytes":2,"objects":1,"sample":["x.txt"]},"reason":"this changes or removes data","risk":"dangerous","to_trash":true}},"turn_id":"t1","type":"proposal","version":"1"}}
+{"out":{"data":{"effect":"DESTRUCTIVE","operations":["files.delete"],"plan":{"command":"rm -- x.txt","decision":"confirm","effect":"DESTRUCTIVE","kind":"operation","native":true,"operation":"files.delete","preview":{"bytes":2,"objects":1,"sample":["x.txt"]},"reason":"this changes or removes data","risk":"dangerous","to_trash":true},"reason":"this changes or removes data","risk":"dangerous"},"id":"a1","turn_id":"t1","type":"approval_request","version":"1"}}
+{"in":{"data":{"decision":"deny","message":"not now"},"id":"a1","turn_id":"t1","type":"approval_response","version":"1"}}
+{"out":{"data":{"command":"rm -- x.txt","completed":true,"kind":"declined","message":"not now","model":"halo-test-preview","reason":"not now"},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

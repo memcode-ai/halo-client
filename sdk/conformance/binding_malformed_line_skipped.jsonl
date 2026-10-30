@@ -1,0 +1,5 @@
+{"meta":{"name":"binding_malformed_line_skipped","description":"a line from halo that is not an envelope is skipped","applies":["binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out_raw":"not an envelope {"}
+{"out":{"data":{"capabilities":["typed_outcomes"],"halo_version":"test","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"eof":true}

@@ -17,5 +17,6 @@ macOS and Linux, x86_64 and arm64. The installer verifies each release's signed 
 - Product: https://memcode.ai/product/halo
 - Docs: https://memcode.ai/docs/halo
 
-This repository contains release binaries only. Halo is proprietary software of Memcode AI, Inc.; use is
-subject to the Memcode terms (https://memcode.ai/terms).
+This repository contains Halo's release binaries and the Halo Agent SDK (`sdk/`). The Halo client is
+proprietary software of Memcode AI, Inc.; use is subject to the Memcode terms (https://memcode.ai/terms). The
+SDK in `sdk/` is licensed separately (`sdk/LICENSE`).

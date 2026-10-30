@@ -1,0 +1,4 @@
+{"meta":{"name":"handshake_model_not_available","description":"initialize names a model the service does not serve: model_not_available, no session, never another model","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","model":"halo-other-preview","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"code":"model_not_available","message":"Halo model halo-other-preview is not available from this service (it serves halo-test-preview)","retryable":false},"type":"error","version":"1"}}
+{"eof":true}

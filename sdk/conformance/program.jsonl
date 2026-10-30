@@ -1,0 +1,10 @@
+{"meta":{"name":"program","description":"a two-step job approved by bypassPermissions: proposal, one step_result per step, the result","applies":["adapter","binding"],"files":{"a.txt":"alpha\n"}}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","permission_mode":"bypassPermissions","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"copy a.txt into out"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"copy a.txt into out"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"plan":{"decision":"confirm","effect":"WRITE","kind":"program","reason":"this program changes things","steps":[{"command":"mkdir -p -- out","id":"s1","operation":"dirs.create","preview":{"bytes":0,"objects":0},"summary":"create folders"},{"dependent":true,"id":"s2","operation":"files.copy","summary":"copy files"}]}},"turn_id":"t1","type":"proposal","version":"1"}}
+{"out":{"data":{"step":{"command":"mkdir -p -- out","id":"s1","result":{"kind":"done","note":"created the folder out"}}},"turn_id":"t1","type":"step_result","version":"1"}}
+{"out":{"data":{"step":{"command":"cp -n -- a.txt out/a.txt","id":"s2","result":{"kind":"done","note":"copied a.txt to out/a.txt"}}},"turn_id":"t1","type":"step_result","version":"1"}}
+{"out":{"data":{"authorization":{"detail":"bypassPermissions","source":"mode"},"completed":true,"kind":"result","model":"halo-test-preview","program":{"steps":[{"command":"mkdir -p -- out","id":"s1","result":{"kind":"done","note":"created the folder out"}},{"command":"cp -n -- a.txt out/a.txt","id":"s2","result":{"kind":"done","note":"copied a.txt to out/a.txt"}}]}},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

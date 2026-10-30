@@ -1,0 +1,7 @@
+{"meta":{"name":"not_signed_in","description":"signed_in false; a turn fails with not_signed_in and nothing is sent to the service","applies":["adapter","binding"],"signed_out":true}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":false},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"code":"not_signed_in","message":"Halo is not signed in on this computer: run `halo login` (a Memcode account works)","retryable":false},"turn_id":"t1","type":"error","version":"1"}}
+{"eof":true}

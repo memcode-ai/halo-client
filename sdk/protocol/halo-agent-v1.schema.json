@@ -1,0 +1,837 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://memcode.ai/halo/protocol/halo-agent-v1.schema.json",
+  "title": "Halo machine protocol, version 1",
+  "description": "Newline-delimited JSON envelopes between a host and `halo --protocol stream-json`. Generated from the Go protocol types; do not edit.",
+  "$ref": "#/$defs/Envelope",
+  "x-protocol-version": "1",
+  "x-message-types": [
+    "approval_request",
+    "approval_response",
+    "cancel",
+    "choice_request",
+    "choice_response",
+    "error",
+    "initialize",
+    "initialized",
+    "offer_request",
+    "offer_response",
+    "outcome",
+    "proposal",
+    "reset",
+    "session_reset",
+    "step_result",
+    "turn_started",
+    "user_turn"
+  ],
+  "x-payloads": {
+    "approval_request": {
+      "$ref": "#/$defs/ApprovalRequestData"
+    },
+    "approval_response": {
+      "$ref": "#/$defs/ApprovalResponseData"
+    },
+    "cancel": {
+      "type": "object"
+    },
+    "choice_request": {
+      "$ref": "#/$defs/ChoiceRequestData"
+    },
+    "choice_response": {
+      "$ref": "#/$defs/ChoiceResponseData"
+    },
+    "error": {
+      "$ref": "#/$defs/ErrorData"
+    },
+    "initialize": {
+      "$ref": "#/$defs/InitializeData"
+    },
+    "initialized": {
+      "$ref": "#/$defs/InitializedData"
+    },
+    "offer_request": {
+      "$ref": "#/$defs/OfferRequestData"
+    },
+    "offer_response": {
+      "$ref": "#/$defs/OfferResponseData"
+    },
+    "outcome": {
+      "$ref": "#/$defs/OutcomeData"
+    },
+    "proposal": {
+      "$ref": "#/$defs/ProposalData"
+    },
+    "reset": {
+      "type": "object"
+    },
+    "session_reset": {
+      "$ref": "#/$defs/SessionResetData"
+    },
+    "step_result": {
+      "$ref": "#/$defs/StepResultData"
+    },
+    "turn_started": {
+      "$ref": "#/$defs/TurnStartedData"
+    },
+    "user_turn": {
+      "$ref": "#/$defs/UserTurnData"
+    }
+  },
+  "x-outcome-kinds": [
+    "answer",
+    "result",
+    "question",
+    "choice",
+    "unsupported",
+    "unrecognized",
+    "denied",
+    "declined",
+    "cancelled",
+    "failed",
+    "proposed"
+  ],
+  "x-error-codes": [
+    "not_signed_in",
+    "approval_required",
+    "denied_by_mode",
+    "disallowed",
+    "denied_by_halo",
+    "denied_by_service",
+    "no_sandbox",
+    "version_mismatch",
+    "invalid_request",
+    "turn_in_progress",
+    "service_unreachable",
+    "internal",
+    "service_error",
+    "model_not_available",
+    "rate_limit",
+    "concurrent",
+    "capacity_unavailable",
+    "temporarily_unavailable",
+    "client_version_mismatch"
+  ],
+  "x-permission-modes": [
+    "default",
+    "dontAsk",
+    "acceptEdits",
+    "plan",
+    "bypassPermissions"
+  ],
+  "x-capabilities": [
+    "typed_outcomes",
+    "plan_view",
+    "approvals",
+    "choices",
+    "offers",
+    "cancel",
+    "reset",
+    "session_permissions",
+    "program_steps",
+    "model_pinning",
+    "streaming"
+  ],
+  "$defs": {
+    "Answer": {
+      "type": "object",
+      "properties": {
+        "aggregate": {
+          "type": "string"
+        },
+        "exists": {
+          "type": "boolean"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "number": {
+          "type": "number"
+        },
+        "field": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "aggregate"
+      ]
+    },
+    "ApprovalRequestData": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/PlanView"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "risk": {
+          "type": "string"
+        },
+        "authorities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AuthorityView"
+          }
+        },
+        "catastrophic": {
+          "type": "boolean"
+        },
+        "unconfined": {
+          "type": "boolean"
+        },
+        "rememberable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "plan",
+        "operations"
+      ]
+    },
+    "ApprovalResponseData": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "decision"
+      ]
+    },
+    "AuthorityView": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "scoped": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "AuthorizationData": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source"
+      ]
+    },
+    "ChoiceRequestData": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "question",
+        "options"
+      ]
+    },
+    "ChoiceResponseData": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer"
+        },
+        "cancel": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "index"
+      ]
+    },
+    "ClientInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "Envelope": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "turn_id": {
+          "type": "string"
+        },
+        "data": {}
+      },
+      "required": [
+        "version",
+        "type"
+      ]
+    },
+    "ErrorData": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "retry_after_ms": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryable",
+        "message"
+      ]
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "dir": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ext": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "integer"
+        },
+        "empty": {
+          "type": "boolean"
+        },
+        "format": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "dir",
+        "name",
+        "ext",
+        "size",
+        "modified"
+      ]
+    },
+    "InitializeData": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "client": {
+          "$ref": "#/$defs/ClientInfo"
+        },
+        "permission_mode": {
+          "type": "string"
+        },
+        "allowed_operations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disallowed_operations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allow_catastrophic": {
+          "type": "boolean"
+        },
+        "allow_unconfined": {
+          "type": "boolean"
+        },
+        "setting_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "require": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "client"
+      ]
+    },
+    "InitializedData": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "halo_version": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "signed_in": {
+          "type": "boolean"
+        },
+        "model": {
+          "$ref": "#/$defs/ModelInfo"
+        }
+      },
+      "required": [
+        "session_id",
+        "protocol",
+        "halo_version",
+        "service",
+        "capabilities",
+        "signed_in"
+      ]
+    },
+    "ModelInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "replacement": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status"
+      ]
+    },
+    "OfferRequestData": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "question"
+      ]
+    },
+    "OfferResponseData": {
+      "type": "object",
+      "properties": {
+        "yes": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "yes"
+      ]
+    },
+    "OutcomeData": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "domain": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/Result"
+        },
+        "program": {
+          "$ref": "#/$defs/ProgramResult"
+        },
+        "plan": {
+          "$ref": "#/$defs/PlanView"
+        },
+        "authorization": {
+          "$ref": "#/$defs/AuthorizationData"
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "completed"
+      ]
+    },
+    "PlanView": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "risk": {
+          "type": "string"
+        },
+        "catastrophic": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "native": {
+          "type": "boolean"
+        },
+        "to_trash": {
+          "type": "boolean"
+        },
+        "confinement": {
+          "type": "string"
+        },
+        "unconfined": {
+          "type": "boolean"
+        },
+        "authorities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AuthorityView"
+          }
+        },
+        "preview": {
+          "$ref": "#/$defs/PreviewView"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StepView"
+          }
+        },
+        "rememberable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "decision"
+      ]
+    },
+    "PreviewView": {
+      "type": "object",
+      "properties": {
+        "objects": {
+          "type": "integer"
+        },
+        "bytes": {
+          "type": "integer"
+        },
+        "sample": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "objects",
+        "bytes"
+      ]
+    },
+    "ProgramResult": {
+      "type": "object",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StepOutcome"
+          }
+        },
+        "failed": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "steps"
+      ]
+    },
+    "ProposalData": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/PlanView"
+        }
+      },
+      "required": [
+        "plan"
+      ]
+    },
+    "Result": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Row"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/File"
+          }
+        },
+        "text": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "answer": {
+          "$ref": "#/$defs/Answer"
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "Row": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "SessionResetData": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id"
+      ]
+    },
+    "StepOutcome": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "skipped": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/Result"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "StepResultData": {
+      "type": "object",
+      "properties": {
+        "step": {
+          "$ref": "#/$defs/StepOutcome"
+        }
+      },
+      "required": [
+        "step"
+      ]
+    },
+    "StepView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "preview": {
+          "$ref": "#/$defs/PreviewView"
+        },
+        "dependent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "operation"
+      ]
+    },
+    "TurnStartedData": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "UserTurnData": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    }
+  }
+}

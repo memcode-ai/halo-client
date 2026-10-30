@@ -1,0 +1,6 @@
+{"meta":{"name":"binding_exit_mid_turn","description":"halo exits while a turn runs: the turn ends with halo_exited instead of hanging","applies":["binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes"],"halo_version":"test","protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"halo_exit":true}

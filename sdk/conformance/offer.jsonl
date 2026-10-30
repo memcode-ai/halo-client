@@ -1,0 +1,10 @@
+{"meta":{"name":"offer","description":"the service needs a path itself: offer_request resend_literal_paths, yes, the request is sent again","applies":["adapter","binding"],"aliasing":true}}
+{"in":{"data":{"capabilities":["approvals","choices","offers"],"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"search for ~/private/plan.md"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"search for ~/private/plan.md"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"kind":"resend_literal_paths","question":"Halo needs the path itself to do this. Send this request with your paths written out?"},"id":"o1","turn_id":"t1","type":"offer_request","version":"1"}}
+{"in":{"data":{"yes":true},"id":"o1","turn_id":"t1","type":"offer_response","version":"1"}}
+{"out":{"data":{"plan":{"command":"grep -rn -- '~/private/plan.md' .","confinement":"your private files outside this folder unreadable, changes nothing, no network","decision":"allow","effect":"READ","kind":"operation","operation":"content.search","risk":"safe"}},"turn_id":"t1","type":"proposal","version":"1"}}
+{"out":{"data":{"authorization":{"source":"default"},"command":"grep -rn -- '~/private/plan.md' .","completed":true,"kind":"result","model":"halo-test-preview","result":{"kind":"text"}},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

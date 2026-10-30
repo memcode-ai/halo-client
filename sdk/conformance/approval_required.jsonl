@@ -1,0 +1,8 @@
+{"meta":{"name":"approval_required","description":"default mode and a host that answers no approvals: denied approval_required, never asked","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"write hello to out.txt"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"write hello to out.txt"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"plan":{"command":"printf '%s\\n' hello \u003e out.txt","decision":"confirm","effect":"WRITE","kind":"operation","native":true,"operation":"files.write","preview":{"bytes":0,"objects":1,"sample":["out.txt"]},"reason":"this changes files","risk":"medium"}},"turn_id":"t1","type":"proposal","version":"1"}}
+{"out":{"data":{"code":"approval_required","command":"printf '%s\\n' hello \u003e out.txt","completed":true,"kind":"denied","message":"approval required: this changes files","model":"halo-test-preview","reason":"approval required: this changes files"},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

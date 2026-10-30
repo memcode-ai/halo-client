@@ -1,0 +1,4 @@
+{"meta":{"name":"handshake_ok","description":"initialize, then initialized with the session's facts","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"eof":true}

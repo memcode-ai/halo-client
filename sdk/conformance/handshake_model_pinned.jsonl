@@ -1,0 +1,7 @@
+{"meta":{"name":"handshake_model_pinned","description":"initialize names a public model: initialized reports it, and every outcome names the model that interpreted it","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","model":"halo-test-preview","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"what is 2 plus 2"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"completed":true,"kind":"answer","message":"4","model":"halo-test-preview"},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}

@@ -1,0 +1,7 @@
+{"meta":{"name":"unrecognized","description":"nothing read as anything Halo knows","applies":["adapter","binding"]}}
+{"in":{"data":{"client":{"name":"conformance","version":"1.0"},"cwd":"$ROOT","protocol":"1"},"type":"initialize","version":"1"}}
+{"out":{"data":{"capabilities":["typed_outcomes","plan_view","approvals","choices","offers","cancel","reset","session_permissions","program_steps","model_pinning"],"halo_version":"test","model":{"id":"halo-test-preview","status":"active"},"protocol":"1","service":"halo/1","session_id":"$SESSION","signed_in":true},"type":"initialized","version":"1"}}
+{"in":{"data":{"text":"blorp"},"turn_id":"t1","type":"user_turn","version":"1"}}
+{"out":{"data":{"text":"blorp"},"turn_id":"t1","type":"turn_started","version":"1"}}
+{"out":{"data":{"completed":true,"kind":"unrecognized","message":"Halo didn't recognize that as something it can do.","model":"halo-test-preview","reason":"Halo didn't recognize that as something it can do."},"turn_id":"t1","type":"outcome","version":"1"}}
+{"eof":true}
