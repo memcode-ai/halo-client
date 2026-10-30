@@ -205,6 +205,10 @@ type turnRun struct {
 }
 
 func TestConformance(t *testing.T) {
+	if _, err := os.Stat("../conformance"); err != nil {
+		// a downloaded module carries no transcripts (they sit beside it in the repository, sdk/conformance)
+		t.Skip("conformance transcripts not present: run from the halo-client repository")
+	}
 	files, _ := filepath.Glob("../conformance/*.jsonl")
 	n := 0
 	for _, path := range files {
