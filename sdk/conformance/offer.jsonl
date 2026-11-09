@@ -7,8 +7,8 @@
 {"out":{"data":{"text":"search for ~/private/plan.md"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
 {"out":{"data":{"kind":"resend_literal_paths","question":"Halo needs the path itself to do this. Send this request with your paths written out?"},"id":"o1","session_id":"$SESSION1","turn_id":"t1","type":"offer_request","version":"2"}}
 {"in":{"data":{"yes":true},"id":"o1","session_id":"$SESSION1","turn_id":"t1","type":"offer_response","version":"2"}}
-{"out":{"data":{"plan":{"command":"find . -maxdepth 1 -type f -exec grep -nHI -- '~/private/plan.md' {} +","confinement":"your private files outside this folder unreadable, changes nothing, no network","decision":"allow","effect":"READ","kind":"operation","operation":"content.search","risk":"safe"}},"session_id":"$SESSION1","turn_id":"t1","type":"proposal","version":"2"}}
-{"out":{"data":{"authorization":{"source":"default"},"command":"find . -maxdepth 1 -type f -exec grep -nHI -- '~/private/plan.md' {} +","completed":true,"kind":"result","model":"halo-test-preview","result":{"kind":"text"}},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"out":{"data":{"plan":{"command":"find . -maxdepth 1 -type f -exec grep -nHI --null -- '~/private/plan.md' {} +","confinement":"your private files outside this folder unreadable, changes nothing, no network","decision":"allow","effect":"READ","kind":"operation","operation":"content.search","risk":"safe"}},"session_id":"$SESSION1","turn_id":"t1","type":"proposal","version":"2"}}
+{"out":{"data":{"authorization":{"source":"default"},"command":"find . -maxdepth 1 -type f -exec grep -nHI --null -- '~/private/plan.md' {} +","completed":true,"kind":"result","model":"halo-test-preview","result":{"columns":["path","line","text"],"kind":"rows","object":"match"}},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
 {"in":{"id":"q1","type":"shutdown","version":"2"}}
 {"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
 {"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}
