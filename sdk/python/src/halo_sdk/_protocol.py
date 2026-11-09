@@ -172,6 +172,7 @@ class OutcomeData(TypedDict):
     command: NotRequired[str]
     result: NotRequired["Result"]
     program: NotRequired["ProgramResult"]
+    display: NotRequired[str]
     plan: NotRequired["PlanView"]
     authorization: NotRequired["AuthorizationData"]
     completed: bool

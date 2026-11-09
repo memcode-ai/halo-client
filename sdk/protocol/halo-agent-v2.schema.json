@@ -577,6 +577,9 @@
         "program": {
           "$ref": "#/$defs/ProgramResult"
         },
+        "display": {
+          "type": "string"
+        },
         "plan": {
           "$ref": "#/$defs/PlanView"
         },

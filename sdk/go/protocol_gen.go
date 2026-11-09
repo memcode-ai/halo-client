@@ -157,6 +157,7 @@ type OutcomeData struct {
 	Command       string             `json:"command,omitempty"`
 	Result        *Result            `json:"result,omitempty"`
 	Program       *ProgramResult     `json:"program,omitempty"`
+	Display       string             `json:"display,omitempty"`
 	Plan          *PlanView          `json:"plan,omitempty"`
 	Authorization *AuthorizationData `json:"authorization,omitempty"`
 	Completed     bool               `json:"completed"`

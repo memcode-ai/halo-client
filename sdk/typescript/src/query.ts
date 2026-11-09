@@ -285,6 +285,7 @@ export function toResult(o: Outcome, sessionId: string): QueryResult {
   const text =
     o.message ??
     o.question ??
+    (o.display || undefined) ??
     (res?.note && (rows.length === 0 || value !== undefined) ? res.note : undefined) ??
     res?.text ??
     (rows.length ? table(columns, rows) : "") ??

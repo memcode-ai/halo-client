@@ -198,7 +198,9 @@ def to_result(o: dict[str, Any], session_id: str) -> QueryResult:
     if value is None and o.get("kind") == "answer":
         value = o.get("message")
     note = res.get("note")
-    text = (o.get("message") or o.get("question")
+    # what Halo would say: its own rendering of the result when it sent one (the same table a person sees at the
+    # terminal, the first page of a long one), otherwise built from the typed parts
+    text = (o.get("message") or o.get("question") or o.get("display")
             or (note if note and (not rows or value is not None) else None)
             or res.get("text") or (_table(columns, rows) if rows else None) or o.get("reason") or "")
     plan = o.get("plan") or {}

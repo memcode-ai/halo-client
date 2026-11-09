@@ -10,6 +10,9 @@ class Results(unittest.TestCase):
         self.assertTrue(r.ok)
         self.assertEqual(r.rows, [{"region": "west", "avg price": 600.3}])
         self.assertRegex(r.text, r"REGION\s+AVG PRICE\nwest\s+600\.3")
+        shown = halo_sdk.to_result({"kind": "result", "completed": True, "display": "| region | avg price |\n|--------|----------:|\n| west   |     600.3 |\n",
+                                    "result": {"kind": "rows", "columns": ["region", "avg price"], "rows": [{"region": "west", "avg price": 600.3}]}}, "s1")
+        self.assertEqual(shown.text, "| region | avg price |\n|--------|----------:|\n| west   |     600.3 |\n")  # Halo's own rendering wins
         c = halo_sdk.to_result({"kind": "result", "completed": True, "result": {"kind": "rows", "note": "3", "answer": {"aggregate": "count", "count": 3}}}, "s1")
         self.assertEqual((c.value, c.text), (3, "3"))
         a = halo_sdk.to_result({"kind": "answer", "completed": True, "message": "125.66 lb"}, "s1")

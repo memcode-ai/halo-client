@@ -268,6 +268,8 @@ pub struct OutcomeData {
     pub result: Option<Result>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub program: Option<ProgramResult>,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub display: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub plan: Option<PlanView>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -223,6 +223,8 @@ func ToResult(o *Outcome, sessionID string) *QueryResult {
 		r.Text = o.Message
 	case o.Question != "":
 		r.Text = o.Question
+	case o.Display != "":
+		r.Text = strings.TrimRight(o.Display, "\n") // Halo's own rendering: what a person sees at the terminal
 	case res != nil && res.Note != "" && (len(r.Rows) == 0 || r.Value != nil):
 		r.Text = res.Note
 	case res != nil && res.Text != "":

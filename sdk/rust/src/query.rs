@@ -223,6 +223,8 @@ pub fn to_result(o: OutcomeData, session_id: String) -> QueryResult {
         o.message.clone()
     } else if !o.question.is_empty() {
         o.question.clone()
+    } else if !o.display.is_empty() {
+        o.display.trim_end_matches('\n').to_string() // Halo's own rendering: what a person sees at the terminal
     } else if let Some(n) = note.filter(|_| rows.is_empty() || value.is_some()) {
         n
     } else if let Some(t) = rtext {

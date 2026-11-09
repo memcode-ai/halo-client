@@ -150,6 +150,7 @@ export interface OutcomeData {
   command?: string;
   result?: Result;
   program?: ProgramResult;
+  display?: string;
   plan?: PlanView;
   authorization?: AuthorizationData;
   completed: boolean;
