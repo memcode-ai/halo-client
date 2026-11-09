@@ -6,7 +6,7 @@
 {"in":{"data":{"text":"list the files"},"session_id":"$SESSION1","turn_id":"t1","type":"user_turn","version":"2"}}
 {"out":{"data":{"text":"list the files"},"session_id":"$SESSION1","turn_id":"t1","type":"turn_started","version":"2"}}
 {"out":{"data":{"plan":{"command":"find . -maxdepth 1 -type f -print","decision":"allow","effect":"READ","kind":"operation","native":true,"operation":"files.list","risk":"safe"}},"session_id":"$SESSION1","turn_id":"t1","type":"proposal","version":"2"}}
-{"out":{"data":{"authorization":{"source":"default"},"command":"find . -maxdepth 1 -type f -print","completed":true,"kind":"result","model":"halo-test-preview","result":{"files":[{"dir":"","ext":"txt","kind":"regular","mode":420,"modified":"2026-01-01T00:00:00Z","name":"a.txt","owner":"$OWNER","path":"a.txt","size":6}],"kind":"files"}},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
+{"out":{"data":{"authorization":{"source":"default"},"command":"find . -maxdepth 1 -type f -print","completed":true,"kind":"result","model":"halo-test-preview","result":{"files":[{"dir":"","ext":"txt","kind":"regular","mode":420,"modified":"2026-01-01T00:00:00Z","name":"a.txt","owner":"$OWNER","path":"a.txt","size":6}],"kind":"files","shown":1}},"session_id":"$SESSION1","turn_id":"t1","type":"outcome","version":"2"}}
 {"in":{"id":"q1","type":"shutdown","version":"2"}}
 {"out":{"data":{"reason":"shutdown","session_id":"$SESSION1"},"session_id":"$SESSION1","type":"session_closed","version":"2"}}
 {"out":{"data":{},"id":"q1","type":"shutdown_complete","version":"2"}}

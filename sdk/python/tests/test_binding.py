@@ -97,9 +97,9 @@ class TestBinding(unittest.IsolatedAsyncioTestCase):
         self.assertEqual([(e["type"], e["session_id"]) for e in h.sent], [(Msg.USER_TURN, "S1"), (Msg.USER_TURN, "S2")])
         h.write(type=Msg.OUTCOME, session_id="S2", turn_id=ex2.turn_id, data={"kind": "answer", "completed": True})
         self.assertEqual((await ex2.outcome())["kind"], "answer")
-        h.write(type=Msg.OUTCOME, session_id="S1", turn_id=ex.turn_id, data={"kind": "answer", "completed": True, "model": "halo-orbit-preview"})
+        h.write(type=Msg.OUTCOME, session_id="S1", turn_id=ex.turn_id, data={"kind": "answer", "completed": True, "model": "halo-meridian-preview"})
         await ex.outcome()
-        self.assertEqual(s.model, "halo-orbit-preview")
+        self.assertEqual(s.model, "halo-meridian-preview")
         await c.close()
 
     def test_find(self) -> None:

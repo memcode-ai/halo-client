@@ -61,9 +61,9 @@ async fn one_turn_per_session_and_model_pin() {
     assert_eq!(got, vec![("user_turn".into(), "S1".into()), ("user_turn".into(), "S2".into())]);
     say.send(json!({"version":"2","type":"outcome","session_id":"S2","turn_id":ex2.turn_id(),"data":{"kind":"answer","completed":true}})).unwrap();
     assert_eq!(ex2.outcome().await.unwrap().kind, "answer");
-    say.send(json!({"version":"2","type":"outcome","session_id":"S1","turn_id":ex.turn_id(),"data":{"kind":"answer","completed":true,"model":"halo-orbit-preview"}})).unwrap();
+    say.send(json!({"version":"2","type":"outcome","session_id":"S1","turn_id":ex.turn_id(),"data":{"kind":"answer","completed":true,"model":"halo-meridian-preview"}})).unwrap();
     ex.outcome().await.unwrap();
-    assert_eq!(s.model(), "halo-orbit-preview");
+    assert_eq!(s.model(), "halo-meridian-preview");
     c.close().await;
 }
 

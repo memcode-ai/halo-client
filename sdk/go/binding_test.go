@@ -192,11 +192,11 @@ func TestConcurrentRunRefused(t *testing.T) {
 	if o, err := ex2.Outcome(); err != nil || o.Kind != KindAnswer {
 		t.Fatalf("other session: %v %v", o, err)
 	}
-	write(Envelope{Type: MsgOutcome, SessionID: s.ID(), TurnID: ex.TurnID()}, OutcomeData{Kind: KindAnswer, Message: "ok", Completed: true, Model: "halo-orbit-preview"})
+	write(Envelope{Type: MsgOutcome, SessionID: s.ID(), TurnID: ex.TurnID()}, OutcomeData{Kind: KindAnswer, Message: "ok", Completed: true, Model: "halo-meridian-preview"})
 	if o, err := ex.Outcome(); err != nil || o.Kind != KindAnswer {
 		t.Fatalf("%v %v", o, err)
 	}
-	if s.Model() != "halo-orbit-preview" {
+	if s.Model() != "halo-meridian-preview" {
 		t.Errorf("the first turn did not pin the model: %q", s.Model())
 	}
 }
@@ -249,7 +249,7 @@ func TestPinnedModelNeedsAPinningHalo(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer c.Close()
-	if _, err := c.NewSession(context.Background(), SessionOptions{Model: "halo-orbit-preview"}); err == nil || err.(*Error).Code != CodeVersionMismatch {
+	if _, err := c.NewSession(context.Background(), SessionOptions{Model: "halo-meridian-preview"}); err == nil || err.(*Error).Code != CodeVersionMismatch {
 		t.Errorf("an old halo: %v", err)
 	}
 	f2, _, _ := handshake(t, "test", CapModelPinning, CapSessions)
@@ -258,7 +258,7 @@ func TestPinnedModelNeedsAPinningHalo(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer c2.Close()
-	if s, err := c2.NewSession(context.Background(), SessionOptions{Model: "halo-orbit-preview"}); err != nil || s == nil {
+	if s, err := c2.NewSession(context.Background(), SessionOptions{Model: "halo-meridian-preview"}); err != nil || s == nil {
 		t.Errorf("a pinning halo: %v", err)
 	}
 }

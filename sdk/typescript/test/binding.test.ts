@@ -66,9 +66,9 @@ test("one turn at a time per session; another session is unaffected", async () =
   assert.deepEqual(h.sent.map((e) => [e.type, e.session_id]), [[Msg.UserTurn, "S1"], [Msg.UserTurn, "S2"]]);
   h.write({ type: Msg.Outcome, session_id: "S2", turn_id: ex2.turnId }, { kind: "answer", completed: true });
   assert.equal((await ex2.outcome).kind, "answer");
-  h.write({ type: Msg.Outcome, session_id: "S1", turn_id: ex.turnId }, { kind: "answer", completed: true, model: "halo-orbit-preview" });
+  h.write({ type: Msg.Outcome, session_id: "S1", turn_id: ex.turnId }, { kind: "answer", completed: true, model: "halo-meridian-preview" });
   await ex.outcome;
-  assert.equal(s.model, "halo-orbit-preview");
+  assert.equal(s.model, "halo-meridian-preview");
   await c.close();
 });
 

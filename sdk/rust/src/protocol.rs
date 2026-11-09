@@ -361,8 +361,12 @@ pub struct Result {
     pub text: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub note: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub warnings: Vec<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub answer: Option<Answer>,
+    #[serde(default, skip_serializing_if = "is_zero_i64")]
+    pub shown: i64,
 }
 
 /// Row is a protocol type.

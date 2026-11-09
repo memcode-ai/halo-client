@@ -1,6 +1,6 @@
 # Halo Agent SDK for TypeScript
 
-Drive the installed Halo from your programs and agents. **Requires the next Halo client release.**
+Drive the installed Halo from your programs and agents. **Requires Halo client v0.1.18 or later.**
 
 ```sh
 npm install @memcode-ai/halo   # with the next Halo client release

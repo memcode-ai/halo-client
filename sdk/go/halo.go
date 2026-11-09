@@ -122,7 +122,7 @@ type SessionOptions struct {
 	AllowUnconfined      bool
 	SettingSources       []string
 
-	// Model pins the session to an exact public Halo model ("halo-orbit-preview"); "" takes the default, pinned
+	// Model pins the session to an exact public Halo model ("halo-meridian-preview"); "" takes the default, pinned
 	// by the session's first turn. A model the service does not serve fails that turn with model_not_available:
 	// Halo never substitutes another model, and updating Halo never changes a pinned one.
 	Model string

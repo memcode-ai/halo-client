@@ -746,8 +746,17 @@
         "note": {
           "type": "string"
         },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "answer": {
           "$ref": "#/$defs/Answer"
+        },
+        "shown": {
+          "type": "integer"
         }
       },
       "required": [

@@ -616,3 +616,7 @@ class Execution:
         else:
             self._result.set_result(o)  # type: ignore[arg-type]
         self._queue.put_nowait(None)
+
+
+# the public surface (query.py): query() for one request, session() for a conversation
+from .query import Allow, Deny, OperationRequest, QueryResult, Session, close, query, session, to_result  # noqa: E402,F401

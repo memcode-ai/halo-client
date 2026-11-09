@@ -204,14 +204,16 @@ type ProposalData struct {
 
 // Result is a protocol type.
 type Result struct {
-	Kind    string   `json:"kind"`
-	Object  string   `json:"object,omitempty"`
-	Columns []string `json:"columns,omitempty"`
-	Rows    []Row    `json:"rows,omitempty"`
-	Files   []File   `json:"files,omitempty"`
-	Text    string   `json:"text,omitempty"`
-	Note    string   `json:"note,omitempty"`
-	Answer  *Answer  `json:"answer,omitempty"`
+	Kind      string   `json:"kind"`
+	Object    string   `json:"object,omitempty"`
+	Columns   []string `json:"columns,omitempty"`
+	Rows      []Row    `json:"rows,omitempty"`
+	Files     []File   `json:"files,omitempty"`
+	Text      string   `json:"text,omitempty"`
+	Note      string   `json:"note,omitempty"`
+	Warnings  []string `json:"warnings,omitempty"`
+	Answer    *Answer  `json:"answer,omitempty"`
+	Displayed int      `json:"shown,omitempty"`
 }
 
 // Row is a protocol type.

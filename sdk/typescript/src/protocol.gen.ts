@@ -204,7 +204,9 @@ export interface Result {
   files?: File[];
   text?: string;
   note?: string;
+  warnings?: string[];
   answer?: Answer;
+  shown?: number;
 }
 
 /** Row is a protocol type. */

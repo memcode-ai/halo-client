@@ -1,6 +1,6 @@
 # Halo Agent SDK for Rust
 
-Drive the installed Halo from your programs and agents. **Requires the next Halo client release.**
+Drive the installed Halo from your programs and agents. **Requires Halo client v0.1.18 or later.**
 
 ```sh
 cargo add halo-sdk   # with the next Halo client release (uses tokio)

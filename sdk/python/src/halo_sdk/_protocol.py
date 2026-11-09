@@ -231,7 +231,9 @@ class Result(TypedDict):
     files: NotRequired[list["File"]]
     text: NotRequired[str]
     note: NotRequired[str]
+    warnings: NotRequired[list[str]]
     answer: NotRequired["Answer"]
+    shown: NotRequired[int]
 
 
 Row = dict[str, Any]

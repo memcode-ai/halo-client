@@ -85,6 +85,9 @@ export interface Process {
   /** Resolves when the process has exited. */
   exited: Promise<void>;
   kill(): void;
+  /** Keep the application alive while Halo works (ref) or not while it idles (unref); optional. */
+  ref?(): void;
+  unref?(): void;
 }
 
 export type Launch = (bin: string, args: string[], stderr: (chunk: string) => void) => Process;
@@ -118,7 +121,7 @@ export interface SessionOptions {
   allowUnconfined?: boolean;
   /** CLI settings to inherit: none unless named ("user", "project"). */
   settingSources?: string[];
-  /** Pin an exact public Halo model ("halo-orbit-preview"); undefined pins the default at the first turn. */
+  /** Pin an exact public Halo model ("halo-meridian-preview"); undefined pins the default at the first turn. */
   model?: string;
   /** Close the session after this long without a turn (0 or undefined: never). */
   idleTimeoutMs?: number;
@@ -210,7 +213,12 @@ const spawnLaunch: Launch = (bin, args, stderr) => {
   child.stderr.on("data", (c: string) => stderr(c));
   const exited = new Promise<void>((resolve) => child.once("close", () => resolve()));
   child.once("error", () => {});
-  return { stdin: child.stdin, stdout: child.stdout, exited, kill: () => child.kill("SIGKILL") };
+  const pipes = [child.stdin, child.stdout, child.stderr] as unknown as { ref?(): void; unref?(): void }[];
+  return {
+    stdin: child.stdin, stdout: child.stdout, exited, kill: () => child.kill("SIGKILL"),
+    ref: () => { child.ref(); for (const p of pipes) p.ref?.(); },
+    unref: () => { child.unref(); for (const p of pipes) p.unref?.(); },
+  };
 };
 
 function older(have: string, want: string): boolean {
@@ -250,6 +258,14 @@ export class Halo {
 
   /** The handshake: Halo's version and capabilities, and whether it is signed in. */
   info!: InitializedData;
+
+  #holds = 0;
+  /** @internal Keeps the application alive while a request runs; an idle Halo never does. */
+  _hold(on: boolean): void {
+    this.#holds = Math.max(0, this.#holds + (on ? 1 : -1));
+    if (this.#holds > 0) this.#proc.ref?.();
+    else this.#proc.unref?.();
+  }
   readonly #opts: ClientOptions;
   readonly #proc: Process;
   readonly #sessions = new Map<string, HaloSession>();
@@ -653,3 +669,6 @@ export class Execution {
     this.#wake?.();
   }
 }
+
+export { query, session, close, Session, Query, toResult } from "./query.ts";
+export type { Options, QueryResult, QueryEvent, OperationRequest, OperationDecision, PermissionMode, Status } from "./query.ts";

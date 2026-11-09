@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "halo-sdk"
+name = "memcode-halo"  # PyPI distribution; the import stays halo_sdk ("halo-sdk" on PyPI is an unrelated project)
 version = "0.2.0"
 description = "Halo Agent SDK for Python: drive the installed Halo from your programs and agents."
 license = { text = "Apache-2.0" }

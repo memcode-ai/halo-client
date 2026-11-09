@@ -26,6 +26,8 @@
 //! takes requests from other people must isolate each user's Halo in a container or VM.
 
 pub mod protocol;
+mod query;
+pub use query::{open, query, to_result, CanUseOperation, OperationRequest, Options, Permission, QueryResult};
 
 use std::collections::HashMap;
 use std::future::Future;
@@ -352,6 +354,11 @@ fn with_data<T: Serialize>(mut e: Envelope, data: &T) -> Envelope {
 }
 
 impl Halo {
+    /// Whether the halo process has exited (a client to replace).
+    pub fn has_exited(&self) -> bool {
+        *self.inner.exited.borrow() || self.inner.closed.load(Ordering::SeqCst)
+    }
+
     /// Starts the halo process and completes the handshake. Call it once, at startup, and reuse the client. It talks
     /// to nothing but the local process.
     pub async fn connect(opts: ClientOptions) -> Result<Halo, HaloError> {
